@@ -3,6 +3,8 @@
 
 使用方法：
 
+将 puzzle_image.jpg 和 jigsaw_game.py 下载下来放在一个文件夹中。
+
 首先将自己想要进行拼接的图片复制替换掉puzzle_image.jpg
 
 否则采用默认图片。
