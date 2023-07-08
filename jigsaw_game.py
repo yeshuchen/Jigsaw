@@ -42,6 +42,10 @@ def check_win(pieces):
 
 win = False
 
+print("欢迎来到这个简单的拼图游戏，在进行游戏前，请确保您阅读了游戏规则：https://github.com/yeshuchen/Jigsaw#readme")
+
+clock.tick(120)
+
 while running:
     # Handle events
     for event in pygame.event.get():
