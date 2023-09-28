@@ -1,5 +1,6 @@
 import pygame
 import random
+import time
 
 pygame.init()
 
@@ -14,15 +15,21 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Puzzle Game")
 # Divide the image into 40 pieces
 pieces = []
+Pieces = []
 for i in range(40):
     x = (i % 5) * (WIDTH // 5)
     y = (i // 5) * (HEIGHT // 8)
     rect = pygame.Rect(x, y, WIDTH // 5, HEIGHT // 8)
     piece = image.subsurface(rect)
-    pieces.append(piece)
+    pieces.append([piece, i])
+    Pieces.append([piece, i])
 
 # Shuffle the pieces
-random.shuffle(pieces)
+# random.shuffle(pieces)
+a114514=pieces[0]
+pieces[0]=pieces[1]
+pieces[1]=a114514
+del a114514
 
 # Set up the game loop
 clock = pygame.time.Clock()
@@ -33,12 +40,7 @@ selected_piece_1 = None
 selected_piece_2 = None
 
 def check_win(pieces):
-    for i in range(len(pieces)):
-        x = (i % 5) * (WIDTH // 5)
-        y = (i // 5) * (HEIGHT // 8)
-        if pieces[i].get_rect().x != x or pieces[i].get_rect().y != y:
-            return False
-    return True
+    return pieces == Pieces
 
 win = False
 
@@ -54,7 +56,7 @@ while running:
         elif event.type == pygame.MOUSEBUTTONDOWN:
             pos = pygame.mouse.get_pos()
             for i in range(len(pieces)):
-                rect = pieces[i].get_rect()
+                rect = pieces[i][0].get_rect()
                 rect.x = (i % 5) * (WIDTH // 5)
                 rect.y = (i // 5) * (HEIGHT // 8)
                 if rect.collidepoint(pos):
@@ -66,19 +68,19 @@ while running:
     # Draw the pieces
     screen.fill((255, 255, 255))
     for i in range(len(pieces)):
-        rect = pieces[i].get_rect()
+        rect = pieces[i][0].get_rect()
         rect.x = (i % 5) * (WIDTH // 5)
         rect.y = (i // 5) * (HEIGHT // 8)
         if selected_piece_1 == i:
             pygame.draw.rect(screen, (255, 0, 0), rect, 3)
-        screen.blit(pieces[i], rect)
+        screen.blit(pieces[i][0], rect)
 
     # Swap the selected pieces
     if selected_piece_1 is not None and selected_piece_2 is not None:
         pieces[selected_piece_1], pieces[selected_piece_2] = pieces[selected_piece_2], pieces[selected_piece_1]
         selected_piece_1 = None
         selected_piece_2 = None
-
+    # pygame.display.flip()
     # Check if the puzzle is complete
     if check_win(pieces) == True:
         win = True
@@ -88,12 +90,13 @@ while running:
         font = pygame.font.Font(None, 36)
         text_surface = font.render("You Win!", True, (255,0,0))
         text_rect = text_surface.get_rect(center=(WIDTH//2, HEIGHT//2))
+        pygame.display.flip()
         screen.blit(text_surface, text_rect)
         running = False
     # Update the display
     pygame.display.flip()
-
+    
     # Tick the clock
     clock.tick(60)
-
+time.sleep(3)
 pygame.quit()
